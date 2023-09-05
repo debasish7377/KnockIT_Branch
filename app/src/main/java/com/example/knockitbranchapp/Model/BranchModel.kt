@@ -1,0 +1,51 @@
+package com.example.knockitbranchapp.Model
+
+class BranchModel(
+    var storeId: String,
+    var name : String,
+    var email: String,
+    var profile: String,
+    var storeName: String,
+    var storeDescription: String,
+    var number: String,
+    var city: String,
+    var state: String,
+    var country: String,
+    var pincode: String,
+    var address: String,
+    var latitude: Float,
+    var longitude: Float,
+    var storeCategory: String,
+    var storeImage: String,
+    var storeVerification: String,
+    var oderCompletionSize: String,
+    var deliveryTiming: String,
+    var timeStamp: Long,
+    var pendingPayment: Long,
+    var totalEarning: Long
+) {
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        1F,
+        1F,
+        "",
+        "",
+        "",
+        "",
+        "",
+        1,
+        1,
+        1
+    )
+}

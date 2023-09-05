@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/brandName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/create_store_ed_bg"
+            android:elevation="3dp"
+            android:fontFamily="@font/pt_serif_regular"
+            android:hint="Brand Name"
+            android:padding="10dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Category"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pt_serif_regular"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/selectCategory"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="Select Category"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Sub Category"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        app:layout_constraintStart_toEndOf="@+id/selectCategory"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/subCategory"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="Sub Category"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/selectCategory"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Origional Price"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pt_serif_regular"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/selectCategory"
+        app:layout_constraintTop_toBottomOf="@+id/selectCategory" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Discounted Price"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pt_serif_regular"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/subCategory"
+        app:layout_constraintTop_toBottomOf="@+id/subCategory" />
+
+    <EditText
+        android:id="@+id/OriginalPrice"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="Original Price"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/selectCategory"
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
+    </EditText>
+
+    <EditText
+        android:id="@+id/discountedPrice"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="Price"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:layout_marginStart="5dp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/OriginalPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/city_1"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="city"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/Ok_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/login_btn_bg"
+        android:backgroundTint="@color/primary"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="Add Product"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout23" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*Delivery City"
+        android:textColor="@color/black"
+        android:fontFamily="@font/pt_serif_regular"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/OriginalPrice"
+        app:layout_constraintTop_toBottomOf="@+id/OriginalPrice" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="City 2 (Optional)"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/city_2"
+        app:layout_constraintTop_toBottomOf="@+id/city_1" />
+
+    <EditText
+        android:id="@+id/city_2"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="City (Optional)"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="City 3 (Optional)"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/city_2" />
+
+    <EditText
+        android:id="@+id/city_3"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="City (Optional)"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="City 4 (Optional)"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/city_4"
+        app:layout_constraintTop_toBottomOf="@+id/city_3" />
+
+    <EditText
+        android:id="@+id/city_4"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="City (Optional)"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="City 4 (Optional)"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/city_4" />
+
+    <EditText
+        android:id="@+id/city_5"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/create_store_ed_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:hint="City (Optional)"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout23"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView227">
+
+        <EditText
+            android:id="@+id/productSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/create_store_ed_bg"
+            android:elevation="3dp"
+            android:fontFamily="@font/pt_serif_regular"
+            android:hint="Product Search tag"
+            android:padding="10dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView227"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="@font/pt_serif_regular"
+        android:text="Make sure the tag does not contain any space ex - 3g,4g,5g"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/city_5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

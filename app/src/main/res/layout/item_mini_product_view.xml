@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="110dp"
+        android:layout_height="125dp"
+        android:background="@drawable/btn_buy_now"
+        android:backgroundTint="@color/white"
+        android:elevation="3dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/mini_product_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/shirt"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="18dp"
+            android:background="@drawable/discount_bg"
+            android:backgroundTint="@color/green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/discount_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30% OFF"
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/mini_product_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Black Shirt for men"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:fontFamily="@font/neto_serif"
+        android:textStyle="italic"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/product_brand"
+        app:layout_constraintTop_toBottomOf="@+id/product_brand" />
+
+    <TextView
+        android:id="@+id/mini_product_price12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₹"
+        android:textStyle="italic"
+        android:fontFamily="@font/libre_baskerville"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/mini_product_title"
+        app:layout_constraintTop_toBottomOf="@+id/mini_product_title" />
+
+    <TextView
+        android:id="@+id/mini_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="200"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/libre_baskerville"
+        app:layout_constraintBottom_toBottomOf="@+id/mini_product_price12"
+        app:layout_constraintStart_toEndOf="@+id/mini_product_price12"
+        app:layout_constraintTop_toTopOf="@+id/mini_product_price12" />
+
+    <TextView
+        android:id="@+id/mini_product_cutted_price12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₹"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/libre_baskerville"
+        android:textColor="@color/black"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mini_product_price"
+        app:layout_constraintStart_toEndOf="@+id/mini_product_price" />
+
+    <TextView
+        android:id="@+id/mini_product_cutted_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="400"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/libre_baskerville"
+        app:layout_constraintBottom_toBottomOf="@+id/mini_product_cutted_price12"
+        app:layout_constraintStart_toEndOf="@+id/mini_product_cutted_price12"
+        app:layout_constraintTop_toTopOf="@+id/mini_product_cutted_price12" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/mini_product_cutted_price"
+        app:layout_constraintEnd_toEndOf="@+id/mini_product_cutted_price"
+        app:layout_constraintStart_toStartOf="@+id/mini_product_cutted_price12"
+        app:layout_constraintTop_toTopOf="@+id/mini_product_cutted_price" />
+
+    <TextView
+        android:id="@+id/mini_product_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Free Delivery"
+        android:textColor="@color/green"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/mini_product_price"
+        app:layout_constraintTop_toBottomOf="@+id/select_qty" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_btn_bg"
+        android:backgroundTint="@color/rattingColor"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/mini_product_delivery"
+        app:layout_constraintTop_toBottomOf="@+id/mini_product_delivery">
+
+        <TextView
+            android:id="@+id/mini_product_ratting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:textStyle="italic"
+            android:fontFamily="@font/libre_baskerville"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mini_product_price" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/star"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/mini_product_total_ratting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="200"
+        android:textStyle="italic"
+        android:fontFamily="@font/libre_baskerville"
+        android:textColor="@color/black"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/product_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Puma"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="388dp"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_card"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/login_btn_bg"
+        android:backgroundTint="@color/primary"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Add"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/select_qty"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="3dp"
+        android:visibility="gone"
+        android:background="@drawable/qty_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/mini_product_price"
+        app:layout_constraintTop_toBottomOf="@+id/mini_product_cutted_price">
+
+        <TextView
+            android:id="@+id/select_qty_text"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="Select Quantity"
+            android:textColor="@color/black"
+            android:textSize="10dp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/drop_down" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/productId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="productId"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/avl_qty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/qty_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

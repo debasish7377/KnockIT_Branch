@@ -34,10 +34,15 @@ class HomeFragment : Fragment() {
             .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
                 val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
 
-                if (model?.profile.equals("")){
-                    Glide.with(context!!).load(R.drawable.avatara).into(binding.profileImage)
-                }else{
-                    Glide.with(context!!).load(model?.profile.toString()).into(binding.profileImage)
+                try {
+                    if (model?.profile.equals("")) {
+                        Glide.with(context!!).load(R.drawable.avatara).into(binding.profileImage)
+                    } else {
+                        Glide.with(context!!).load(model?.profile.toString())
+                            .into(binding.profileImage)
+                    }
+                }catch (e: Exception){
+                    e.printStackTrace()
                 }
                 binding.name.text = model?.name
                 binding.email.text = model?.email

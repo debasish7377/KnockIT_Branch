@@ -1,12 +1,16 @@
 package com.example.knockitbranchapp.Activity
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -19,6 +23,7 @@ import com.example.knockitbranchapp.Fragment.ProfileFragment
 import com.example.knockitbranchapp.Fragment.WalletFragment
 import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.R
+import com.example.knockitbranchapp.Service.MyServices
 import com.example.knockitbranchapp.databinding.ActivityDashbordBinding
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +41,7 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityDashbordBinding
     lateinit var reviewDialog: Dialog
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashbordBinding.inflate(layoutInflater)
@@ -94,7 +100,7 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.my_oder -> {
                     setCheckedChancel()
                     invalidateOptionsMenu()
-                    setFragment(MyOderFragment(), MY_ODER_FRAGMENT)
+                    startActivity(Intent(this, DeliveryActivity::class.java))
                     item.isChecked = true
                     window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.primary));
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)

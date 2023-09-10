@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.CategoryActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Category"
+        app:titleTextColor="@color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar7" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sub_categoryRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/category_recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/category_image_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar7">
+
+        <ImageView
+            android:id="@+id/category_image"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="30dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/categoryMainTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/neto_serif"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Fruits and Vegetables"
+            android:textColor="@color/primary"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/category_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/products_not_available_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Products Not Available"
+        android:textStyle="italic"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toEndOf="@+id/category_recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/add"
+        android:layout_margin="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Category"
+        android:fontFamily="@font/pt_serif_regular"
+        android:textColor="@color/primary"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/add_category"
+        app:layout_constraintStart_toStartOf="@+id/add_category"
+        app:layout_constraintTop_toBottomOf="@+id/add_category" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_sub_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/add"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_category"
+        app:layout_constraintEnd_toEndOf="@+id/add_category"
+        app:layout_constraintStart_toStartOf="@+id/add_category"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Sub Category"
+        android:fontFamily="@font/pt_serif_regular"
+        android:textColor="@color/primary"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/add_sub_category"
+        app:layout_constraintStart_toStartOf="@+id/add_sub_category"
+        app:layout_constraintTop_toBottomOf="@+id/add_sub_category" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

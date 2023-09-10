@@ -4,8 +4,11 @@ import android.content.Context
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.knockit.Adapter.CategoryMiniAdapter
+import com.example.knockit.Adapter.SubCategoryAdapter
 import com.example.knockitbranchapp.Adapter.SelectCategoryAdapterByAddProduct
 import com.example.knockitbranchapp.Adapter.SelectCategoryAdapterByCreateStore
 import com.example.knockitbranchapp.Adapter.SelectSubCategoryAdapter
@@ -23,6 +26,58 @@ class CategoryDatabase {
     var firebasefirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
+
+        fun loadCategoryMini(context: Context, categoryRecyclerView: RecyclerView) {
+            var categoryModel: ArrayList<CategoryModel> = ArrayList<CategoryModel>()
+            val bannerLayout = LinearLayoutManager(context)
+            bannerLayout.orientation = RecyclerView.VERTICAL
+            categoryRecyclerView.layoutManager = bannerLayout
+
+            var categoryAdapter = CategoryMiniAdapter(context!!, categoryModel)
+            categoryRecyclerView.adapter = categoryAdapter
+
+            FirebaseFirestore.getInstance()
+                .collection("Category")
+                .orderBy("timeStamp", Query.Direction.DESCENDING)
+                .get().addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
+                    for (snapshot in queryDocumentSnapshots) {
+                        val model: CategoryModel = snapshot.toObject(CategoryModel::class.java)
+                        categoryModel.add(model)
+                    }
+                    categoryAdapter.notifyDataSetChanged()
+                })
+        }
+
+        fun loadSubCategory(context: Context, subCategoryRecyclerView: RecyclerView, categoryTitle: String, productAvailable: TextView) {
+            var subCategoryModel: ArrayList<SubCategoryModel> = ArrayList<SubCategoryModel>()
+            val layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            subCategoryRecyclerView.layoutManager = layoutManager
+
+            var subCategoryAdapter = SubCategoryAdapter(context!!, subCategoryModel)
+            subCategoryRecyclerView.adapter = subCategoryAdapter
+
+            FirebaseFirestore.getInstance()
+                .collection("SubCategory")
+                .orderBy("timeStamp", Query.Direction.DESCENDING)
+                .get().addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
+                    for (snapshot in queryDocumentSnapshots) {
+                        val model: SubCategoryModel = snapshot.toObject(SubCategoryModel::class.java)
+
+                        if (model.category.equals(categoryTitle)){
+                            if (model.subCategoryTitle.equals("")){
+                                subCategoryRecyclerView.visibility = View.GONE
+                                productAvailable.visibility = View.VISIBLE
+                            }else{
+                                subCategoryModel.add(model)
+                                subCategoryRecyclerView.visibility = View.VISIBLE
+                                productAvailable.visibility = View.GONE
+                            }
+                        }
+
+                    }
+                    subCategoryAdapter.notifyDataSetChanged()
+                })
+        }
 
         fun loadSelectCategoryByCreateStore(context: Context, categoryRecyclerView: RecyclerView) {
             var categoryModel: ArrayList<CategoryModel> = ArrayList<CategoryModel>()

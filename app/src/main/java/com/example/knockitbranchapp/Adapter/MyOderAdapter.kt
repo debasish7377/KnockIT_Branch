@@ -81,6 +81,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         holder.productCuttedPrice.text = model[position].productCuttedPrice.toString()
         holder.yourPrice.text = "Your Price ₹" + model[position].price.toString()
         holder.qty_text.text = model[position].qty
+        holder.userUid.text = model[position].uid
         var youSaved: String =
             (model[position].productCuttedPrice.toInt() - model[position].productPrice.toInt()).toString()
         holder.discountedPrice.text = "₹" + youSaved + " Saved"
@@ -117,26 +118,27 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         .add(userData1)
                         .addOnCompleteListener {
 
-                            FirebaseFirestore.getInstance().collection("USERS")
-                                .document(model[position].uid)
-                                .get()
-                                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                                    val model: UserModel? =
-                                        documentSnapshot.toObject(UserModel::class.java)
-
-                                    val userData2: MutableMap<String, Any?> = HashMap()
-                                    userData2["notificationSize"] = (model?.notificationSize.toString().toInt() + 1).toString()
-
-                                    FirebaseFirestore.getInstance()
-                                        .collection("USERS")
-                                        .document(FirebaseAuth.getInstance().uid.toString())
-                                        .update(userData2)
-                                        .addOnCompleteListener {
-                                            canceledDialog.dismiss()
-                                        }
-
-                                })
                         }
+
+                    FirebaseFirestore.getInstance().collection("USERS")
+                        .document(model[position].uid)
+                        .get()
+                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                            val model: UserModel? =
+                                documentSnapshot.toObject(UserModel::class.java)
+
+                            val userData2: MutableMap<String, Any?> = HashMap()
+                            userData2["notificationSize"] = (model?.notificationSize.toString().toInt() + 1).toString()
+
+                            FirebaseFirestore.getInstance()
+                                .collection("USERS")
+                                .document(holder.userUid.text.toString())
+                                .update(userData2)
+                                .addOnCompleteListener {
+                                    canceledDialog.dismiss()
+                                }
+
+                        })
 
                     val userData: MutableMap<String, Any?> =
                         HashMap()
@@ -177,7 +179,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                     val userData1: MutableMap<String, Any?> =
                         HashMap()
                     userData1["id"] = randomString
-                    userData1["title"] = "Oder Canceled"
+                    userData1["title"] = "Oder Confirmed"
                     userData1["description"] = "Your "+model[position].productTitle+" Oder Confirmed"
                     userData1["timeStamp"] = System.currentTimeMillis()
                     userData1["read"] = "true"
@@ -189,26 +191,27 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         .add(userData1)
                         .addOnCompleteListener {
 
-                            FirebaseFirestore.getInstance().collection("USERS")
-                                .document(model[position].uid)
-                                .get()
-                                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                                    val model: UserModel? =
-                                        documentSnapshot.toObject(UserModel::class.java)
-
-                                    val userData2: MutableMap<String, Any?> = HashMap()
-                                    userData2["notificationSize"] = (model?.notificationSize.toString().toInt() + 1).toString()
-
-                                    FirebaseFirestore.getInstance()
-                                        .collection("USERS")
-                                        .document(FirebaseAuth.getInstance().uid.toString())
-                                        .update(userData2)
-                                        .addOnCompleteListener {
-                                            canceledDialog.dismiss()
-                                        }
-
-                                })
                         }
+
+                    FirebaseFirestore.getInstance().collection("USERS")
+                        .document(model[position].uid)
+                        .get()
+                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                            val model: UserModel? =
+                                documentSnapshot.toObject(UserModel::class.java)
+
+                            val userData2: MutableMap<String, Any?> = HashMap()
+                            userData2["notificationSize"] = (model?.notificationSize.toString().toInt() + 1).toString()
+
+                            FirebaseFirestore.getInstance()
+                                .collection("USERS")
+                                .document(holder.userUid.text.toString())
+                                .update(userData2)
+                                .addOnCompleteListener {
+
+                                }
+
+                        })
                     /////Oder Confirmed Notification
 
 
@@ -369,6 +372,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         var discountedPrice: TextView = itemView.findViewById<TextView?>(R.id.discount_text)
         var qty_text: TextView = itemView.findViewById<TextView?>(R.id.qty_text)
         var yourPrice: TextView = itemView.findViewById<TextView?>(R.id.yourPrice)
+        var userUid: TextView = itemView.findViewById<TextView?>(R.id.userUid)
 
         var canceledBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.canceledBtn)
         var deliveryBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.deliveryBtn)

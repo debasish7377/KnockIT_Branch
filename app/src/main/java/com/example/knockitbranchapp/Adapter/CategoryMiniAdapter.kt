@@ -17,13 +17,17 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.knockitbranchapp.Activity.CategoryActivity
+import com.example.knockitbranchapp.Database.CategoryDatabase
 import com.example.knockitbranchapp.Model.CategoryModel
 import com.example.knockitbranchapp.R
 
-class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) : RecyclerView.Adapter<CategoryMiniAdapter.viewHolder>() {
+class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) :
+    RecyclerView.Adapter<CategoryMiniAdapter.viewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
-        var view: View = LayoutInflater.from(context).inflate(R.layout.item_category_mini,parent,false)
+        var view: View =
+            LayoutInflater.from(context).inflate(R.layout.item_category_mini, parent, false)
         return viewHolder(view)
     }
 
@@ -31,11 +35,19 @@ class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) 
 
         holder.categoryTitle.text = model[position].categoryTitle
         Glide.with(context).load(model[position].categoryImage).into(holder.categoryImage)
-        holder.categoryImageBg.backgroundTintList = ColorStateList.valueOf(Color.parseColor(model[position].categoryBackground))
+        holder.categoryImageBg.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor(model[position].categoryBackground))
         holder.itemView.setOnClickListener {
+            CategoryActivity.categoryMainTitle.text = model[position].categoryTitle
+            Glide.with(context).load(model[position].categoryImage.toString()).into(CategoryActivity.categoryImage)
 
+            CategoryDatabase.loadSubCategory(
+                context,
+                CategoryActivity.subCategoryRecyclerView, model[position].categoryTitle, CategoryActivity.productNotAvailable
+            )
         }
-        }
+
+    }
 
     override fun getItemCount(): Int {
         return model.size
@@ -45,6 +57,7 @@ class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) 
 
         var categoryTitle: TextView = itemView.findViewById<TextView?>(R.id.categoryTitle)
         var categoryImage: ImageView = itemView.findViewById<ImageView?>(R.id.categoryImage)
-        var categoryImageBg: LinearLayout  = itemView.findViewById<LinearLayout?>(R.id.circle_image_bg)
+        var categoryImageBg: LinearLayout =
+            itemView.findViewById<LinearLayout?>(R.id.circle_image_bg)
     }
 }

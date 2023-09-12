@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.knockit.Adapter.CategoryMiniAdapter
 import com.example.knockit.Adapter.SubCategoryAdapter
 import com.example.knockitbranchapp.Adapter.SelectCategoryAdapterByAddProduct
+import com.example.knockitbranchapp.Adapter.SelectCategoryAdapterByAddSubCategory
 import com.example.knockitbranchapp.Adapter.SelectCategoryAdapterByCreateStore
 import com.example.knockitbranchapp.Adapter.SelectSubCategoryAdapter
 import com.example.knockitbranchapp.Model.CategoryModel
@@ -17,6 +18,7 @@ import com.example.knockitbranchapp.Model.SubCategoryModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -39,13 +41,16 @@ class CategoryDatabase {
             FirebaseFirestore.getInstance()
                 .collection("Category")
                 .orderBy("timeStamp", Query.Direction.DESCENDING)
-                .get().addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
-                    for (snapshot in queryDocumentSnapshots) {
-                        val model: CategoryModel = snapshot.toObject(CategoryModel::class.java)
-                        categoryModel.add(model)
+                .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
+                    querySnapshot?.let {
+                        categoryModel.clear()
+                        for (snapshot in it) {
+                            val model: CategoryModel = snapshot.toObject(CategoryModel::class.java)
+                            categoryModel.add(model)
+                        }
+                        categoryAdapter.notifyDataSetChanged()
                     }
-                    categoryAdapter.notifyDataSetChanged()
-                })
+                }
         }
 
         fun loadSubCategory(context: Context, subCategoryRecyclerView: RecyclerView, categoryTitle: String, productAvailable: TextView) {
@@ -59,23 +64,47 @@ class CategoryDatabase {
             FirebaseFirestore.getInstance()
                 .collection("SubCategory")
                 .orderBy("timeStamp", Query.Direction.DESCENDING)
+                .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
+                    querySnapshot?.let {
+                        subCategoryModel.clear()
+                        for (snapshot in it) {
+                            val model: SubCategoryModel =
+                                snapshot.toObject(SubCategoryModel::class.java)
+
+                            if (model.category.equals(categoryTitle)) {
+                                if (model.subCategoryTitle.equals("")) {
+                                    subCategoryRecyclerView.visibility = View.GONE
+                                    productAvailable.visibility = View.VISIBLE
+                                } else {
+                                    subCategoryModel.add(model)
+                                    subCategoryRecyclerView.visibility = View.VISIBLE
+                                    productAvailable.visibility = View.GONE
+                                }
+                            }
+
+                        }
+                        subCategoryAdapter.notifyDataSetChanged()
+                    }
+                }
+        }
+
+        fun loadSelectCategoryByAddSubCategory(context: Context, categoryRecyclerView: RecyclerView) {
+            var categoryModel: ArrayList<CategoryModel> = ArrayList<CategoryModel>()
+            val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            categoryRecyclerView.layoutManager = layoutManager
+
+            var categoryAdapter = SelectCategoryAdapterByAddSubCategory(context!!, categoryModel)
+            categoryRecyclerView.adapter = categoryAdapter
+
+            FirebaseFirestore.getInstance()
+                .collection("Category")
+                .orderBy("timeStamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
                     for (snapshot in queryDocumentSnapshots) {
-                        val model: SubCategoryModel = snapshot.toObject(SubCategoryModel::class.java)
-
-                        if (model.category.equals(categoryTitle)){
-                            if (model.subCategoryTitle.equals("")){
-                                subCategoryRecyclerView.visibility = View.GONE
-                                productAvailable.visibility = View.VISIBLE
-                            }else{
-                                subCategoryModel.add(model)
-                                subCategoryRecyclerView.visibility = View.VISIBLE
-                                productAvailable.visibility = View.GONE
-                            }
-                        }
-
+                        val model: CategoryModel = snapshot.toObject(CategoryModel::class.java)
+                        categoryModel.add(model)
                     }
-                    subCategoryAdapter.notifyDataSetChanged()
+                    categoryAdapter.notifyDataSetChanged()
                 })
         }
 

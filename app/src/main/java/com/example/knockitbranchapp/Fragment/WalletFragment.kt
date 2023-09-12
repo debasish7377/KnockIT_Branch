@@ -1,60 +1,46 @@
 package com.example.knockitbranchapp.Fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.example.knockitbranchapp.Database.NotificationDatabase
+import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.R
+import com.example.knockitbranchapp.databinding.FragmentProfileBinding
+import com.example.knockitbranchapp.databinding.FragmentWalletBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WalletFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class WalletFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wallet, container, false)
-    }
+        val binding: FragmentWalletBinding = FragmentWalletBinding.inflate(inflater, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WalletFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WalletFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        FirebaseFirestore.getInstance()
+            .collection("BRANCHES")
+            .document(FirebaseAuth.getInstance().uid.toString())
+            .addSnapshotListener { querySnapshot: DocumentSnapshot?, e: FirebaseFirestoreException? ->
+                querySnapshot?.let {
+                    val userModel = it.toObject(BranchModel::class.java)
+
+                    binding.pendingPayment.text = "Delivery Pending Payment ₹"+userModel?.pendingPayment.toString()
+                    binding.totalPayment.text = "Total Payment ₹"+userModel?.totalEarning.toString()
+
                 }
             }
+
+        NotificationDatabase.loadNotification(context!!, binding.notificationRecyclerView)
+
+        return binding.root
     }
 }

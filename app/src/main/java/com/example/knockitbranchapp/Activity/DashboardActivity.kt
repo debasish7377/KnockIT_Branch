@@ -91,7 +91,7 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.category -> {
                     setCheckedChancel()
                     invalidateOptionsMenu()
-                    setFragment(CategoryFragment(), CATEGORY_FRAGMENT)
+                    startActivity(Intent(this, CategoryActivity::class.java))
                     item.isChecked = true
                     window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.white));
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
@@ -111,8 +111,8 @@ class DashboardActivity : AppCompatActivity() {
                     invalidateOptionsMenu()
                     setFragment(WalletFragment(), WALLET_FRAGMENT)
                     item.isChecked = true
-                    window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.white));
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.primary));
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
                 }
 
                 R.id.profile -> {

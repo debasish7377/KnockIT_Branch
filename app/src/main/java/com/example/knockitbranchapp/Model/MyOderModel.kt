@@ -26,7 +26,11 @@ class MyOderModel(
     var outForDeliveryDate: String,
     var deliveredDate: String,
     var id: String,
-    var storeId: String
+    var storeId: String,
+    var riderId: String,
+    var ratingProduct: String,
+    var name: String,
+    var number: String
 ) {
 
     constructor(): this(
@@ -46,6 +50,10 @@ class MyOderModel(
         1,
         "",
         1,
+        "",
+        "",
+        "",
+        "",
         "",
         "",
         "",

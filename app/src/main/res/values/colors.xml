@@ -13,4 +13,5 @@
     <color name="averageColor">#EC803D</color>
     <color name="poorColor">#F52833</color>
     <color name="searchBgColor">#E4E6ED</color>
+    <color name="clickedBg">#D6D6D6</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.knockit.Adapter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,6 +22,7 @@ import com.example.knockitbranchapp.Activity.CategoryActivity
 import com.example.knockitbranchapp.Database.CategoryDatabase
 import com.example.knockitbranchapp.Model.CategoryModel
 import com.example.knockitbranchapp.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) :
     RecyclerView.Adapter<CategoryMiniAdapter.viewHolder>() {
@@ -45,6 +47,34 @@ class CategoryMiniAdapter(var context: Context, var model: List<CategoryModel>) 
                 context,
                 CategoryActivity.subCategoryRecyclerView, model[position].categoryTitle, CategoryActivity.productNotAvailable
             )
+        }
+
+        holder.itemView.setOnLongClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Delete")
+            builder.setMessage("Are you sure to delete category ?")
+
+            builder.setPositiveButton("Yes") { dialog, which ->
+
+                FirebaseFirestore.getInstance()
+                    .collection("Category")
+                    .document(model[position].id)
+                    .delete()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            notifyDataSetChanged()
+                            Toast.makeText(context, "Category Deleted Successfully", Toast.LENGTH_SHORT).show()
+                        } else {
+
+                        }
+                    }
+
+            }
+
+            builder.setNegativeButton("No") { dialog, which ->
+            }
+            builder.show()
+            true
         }
 
     }

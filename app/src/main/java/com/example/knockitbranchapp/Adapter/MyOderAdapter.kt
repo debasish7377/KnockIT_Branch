@@ -63,7 +63,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                 }
             })
 
-        ////////////////loading dialog
+        ////////////////canceled dialog
         canceledDialog = Dialog(context)
         canceledDialog.setContentView(R.layout.dialog_oder_canceled)
         canceledDialog.setCancelable(true)
@@ -74,12 +74,12 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         )
         canceledText = canceledDialog.findViewById(R.id.canceledText)
         okBtn = canceledDialog.findViewById(R.id.okBtn)
-        ////////////////loading dialog
+        ////////////////canceled dialog
 
         holder.productTitle.text = model[position].productTitle
         holder.productPrice.text = model[position].productPrice.toString()
         holder.productCuttedPrice.text = model[position].productCuttedPrice.toString()
-        holder.yourPrice.text = "Your Price ₹" + model[position].price.toString()
+        holder.yourPrice.text = model[position].price.toString()
         holder.qty_text.text = model[position].qty
         holder.userUid.text = model[position].uid
         var youSaved: String =
@@ -89,8 +89,74 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         holder.canceledBtn.setOnClickListener {
             if (model[position].delivery.equals("Canceled")) {
                 Toast.makeText(context, "Oder already Canceled", Toast.LENGTH_SHORT).show()
-            } else {
-             canceledDialog.show()
+            } else if (model[position].delivery.equals("Pending")){
+                canceledDialog.show()
+                FirebaseFirestore.getInstance()
+                    .collection("OderNotification")
+                    .document(FirebaseAuth.getInstance().uid.toString())
+                    .delete()
+                val randomString = UUID.randomUUID().toString().substring(0, 18)
+                val userData1: MutableMap<String, Any?> =
+                    HashMap()
+                userData1["id"] = randomString
+                userData1["title"] = "Oder Canceled"
+                userData1["description"] = "Your Oder "+holder.productTitle.text.toString()+" and price ₹"+holder.yourPrice.text.toString()+ " Canceled by you"
+                userData1["payment"] = ""
+                userData1["timeStamp"] = System.currentTimeMillis()
+                userData1["read"] = "true"
+
+                FirebaseFirestore.getInstance()
+                    .collection("BRANCHES")
+                    .document(FirebaseAuth.getInstance().uid.toString())
+                    .collection("MY_NOTIFICATION")
+                    .document(randomString)
+                    .set(userData1)
+                    .addOnCompleteListener {
+
+                    }
+            }else{
+
+                FirebaseFirestore.getInstance().collection("BRANCHES")
+                    .document(model[position].storeId)
+                    .get()
+                    .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                        val model: BranchModel? =
+                            documentSnapshot.toObject(BranchModel::class.java)
+
+                        val userData: MutableMap<String, Any?> =
+                            HashMap()
+                        userData["pendingPayment"] = (model?.pendingPayment.toString().toInt() - holder.yourPrice.text.toString().toInt()).toInt()
+                        FirebaseFirestore.getInstance()
+                            .collection("BRANCHES")
+                            .document(FirebaseAuth.getInstance().uid.toString())
+                            .update(userData)
+                            .addOnCompleteListener {
+
+                            }
+
+                    })
+
+                val randomString = UUID.randomUUID().toString().substring(0, 18)
+                val userData1: MutableMap<String, Any?> =
+                    HashMap()
+                userData1["id"] = randomString
+                userData1["title"] = "Oder Canceled"
+                userData1["description"] = "Your Oder "+holder.productTitle.text.toString()+" and price ₹"+holder.yourPrice.text.toString()+ " Canceled by you"
+                userData1["payment"] = holder.yourPrice.text.toString()+" Payment Canceled"
+                userData1["timeStamp"] = System.currentTimeMillis()
+                userData1["read"] = "true"
+
+                FirebaseFirestore.getInstance()
+                    .collection("BRANCHES")
+                    .document(FirebaseAuth.getInstance().uid.toString())
+                    .collection("MY_NOTIFICATION")
+                    .document(randomString)
+                    .set(userData1)
+                    .addOnCompleteListener {
+
+                    }
+
+                canceledDialog.show()
             }
         }
 
@@ -102,6 +168,11 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 
                 builder.setPositiveButton("Yes") { dialog, which ->
 
+                    canceledDialog.dismiss()
+                    FirebaseFirestore.getInstance()
+                        .collection("OderNotification")
+                        .document(FirebaseAuth.getInstance().uid.toString())
+                        .delete()
                     val randomString = UUID.randomUUID().toString().substring(0, 18)
                     val userData1: MutableMap<String, Any?> =
                         HashMap()
@@ -115,7 +186,8 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         .collection("USERS")
                         .document(model[position].uid)
                         .collection("MY_NOTIFICATION")
-                        .add(userData1)
+                        .document(randomString)
+                        .set(userData1)
                         .addOnCompleteListener {
 
                         }
@@ -175,12 +247,59 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 
                 builder.setPositiveButton("Yes") { dialog, which ->
 
+                    FirebaseFirestore.getInstance()
+                        .collection("OderNotification")
+                        .document(FirebaseAuth.getInstance().uid.toString())
+                        .delete()
+
+                    //////Oder pending payment
+                    FirebaseFirestore.getInstance().collection("BRANCHES")
+                        .document(model[position].storeId)
+                        .get()
+                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                            val model: BranchModel? =
+                                documentSnapshot.toObject(BranchModel::class.java)
+
+                            val userData: MutableMap<String, Any?> =
+                                HashMap()
+                            userData["pendingPayment"] = (model?.pendingPayment.toString().toInt() + holder.yourPrice.text.toString().toInt()).toInt()
+                            FirebaseFirestore.getInstance()
+                                .collection("BRANCHES")
+                                .document(FirebaseAuth.getInstance().uid.toString())
+                                .update(userData)
+                                .addOnCompleteListener {
+
+                                }
+
+                        })
+                    //////Oder pending payment
+
+                    val randomString1 = UUID.randomUUID().toString().substring(0, 18)
+                    val userData2: MutableMap<String, Any?> =
+                        HashMap()
+                    userData2["id"] = randomString1
+                    userData2["title"] = "Oder Confirmed"
+                    userData2["description"] = "Your Oder "+holder.productTitle.text.toString()+" and price ₹"+holder.yourPrice.text.toString()+ " Confirmed"
+                    userData2["payment"] = holder.yourPrice.text.toString()+" Payment Pending"
+                    userData2["timeStamp"] = System.currentTimeMillis()
+                    userData2["read"] = "true"
+
+                    FirebaseFirestore.getInstance()
+                        .collection("BRANCHES")
+                        .document(FirebaseAuth.getInstance().uid.toString())
+                        .collection("MY_NOTIFICATION")
+                        .document(randomString1)
+                        .set(userData2)
+                        .addOnCompleteListener {
+
+                        }
+
                     val randomString = UUID.randomUUID().toString().substring(0, 18)
                     val userData1: MutableMap<String, Any?> =
                         HashMap()
                     userData1["id"] = randomString
                     userData1["title"] = "Oder Confirmed"
-                    userData1["description"] = "Your "+model[position].productTitle+" Oder Confirmed"
+                    userData1["description"] = "Your Oder "+holder.productTitle.text.toString()+" and price ₹"+holder.yourPrice.text.toString()+ " Confirmed"
                     userData1["timeStamp"] = System.currentTimeMillis()
                     userData1["read"] = "true"
 
@@ -188,7 +307,8 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         .collection("USERS")
                         .document(model[position].uid)
                         .collection("MY_NOTIFICATION")
-                        .add(userData1)
+                        .document(randomString)
+                        .set(userData1)
                         .addOnCompleteListener {
 
                         }
@@ -314,37 +434,6 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         } else if (model[position].delivery.equals("Out for delivery")) {
             holder.deliveryBtn.text = "Delivered"
 
-            holder.deliveryBtn.setOnClickListener {
-
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("Oder")
-                builder.setMessage("Oder delivered ?")
-
-                builder.setPositiveButton("Yes") { dialog, which ->
-
-                    val userData: MutableMap<String, Any?> =
-                        HashMap()
-                    userData["delivery"] = "Delivered"
-                    userData["deliveredDate"] = System.currentTimeMillis().toString()
-                    FirebaseFirestore.getInstance()
-                        .collection("ODER")
-                        .document(model[position].id)
-                        .update(userData)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                notifyDataSetChanged()
-                                Toast.makeText(context, "Oder Delivered", Toast.LENGTH_SHORT).show()
-                            } else {
-
-                            }
-                        }
-                }
-
-                builder.setNegativeButton("No") { dialog, which ->
-                }
-
-                builder.show()
-            }
         } else if (model[position].delivery.equals("Delivered")) {
             holder.deliveryBtn.text = "Oder Successfully Completed"
             holder.canceledBtn.visibility = View.GONE
@@ -379,3 +468,61 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 
     }
 }
+
+
+
+
+
+//            holder.deliveryBtn.setOnClickListener {
+//
+//                val builder = AlertDialog.Builder(context)
+//                builder.setTitle("Oder")
+//                builder.setMessage("Oder delivered ?")
+//
+//                builder.setPositiveButton("Yes") { dialog, which ->
+//
+//                    //////Oder pending payment
+//                    FirebaseFirestore.getInstance().collection("BRANCHES")
+//                        .document(model[position].storeId)
+//                        .get()
+//                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+//                            val model: BranchModel? =
+//                                documentSnapshot.toObject(BranchModel::class.java)
+//
+//                            val userData: MutableMap<String, Any?> =
+//                                HashMap()
+//                            userData["pendingPayment"] = (model?.pendingPayment.toString().toInt() + holder.yourPrice.text.toString().toInt()).toInt()
+//                            FirebaseFirestore.getInstance()
+//                                .collection("BRANCHES")
+//                                .document(FirebaseAuth.getInstance().uid.toString())
+//                                .update(userData)
+//                                .addOnCompleteListener {
+//
+//                                }
+//
+//                        })
+//                    //////Oder pending payment
+//
+//                    val userData: MutableMap<String, Any?> =
+//                        HashMap()
+//                    userData["delivery"] = "Delivered"
+//                    userData["deliveredDate"] = System.currentTimeMillis().toString()
+//                    FirebaseFirestore.getInstance()
+//                        .collection("ODER")
+//                        .document(model[position].id)
+//                        .update(userData)
+//                        .addOnCompleteListener {
+//                            if (it.isSuccessful) {
+//                                notifyDataSetChanged()
+//                                Toast.makeText(context, "Oder Delivered", Toast.LENGTH_SHORT).show()
+//                            } else {
+//
+//                            }
+//                        }
+//                }
+//
+//                builder.setNegativeButton("No") { dialog, which ->
+//                }
+//
+//                builder.show()
+//            }

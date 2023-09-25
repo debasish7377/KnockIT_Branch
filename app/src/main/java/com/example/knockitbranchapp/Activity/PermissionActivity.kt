@@ -63,34 +63,42 @@ class PermissionActivity : AppCompatActivity() {
         var submitBtn: AppCompatButton = nameEmailDialog.findViewById(R.id.submit_btn)!!
         ////////////////loading dialog
 
-//        FirebaseFirestore.getInstance().collection("BRANCHES")
-//            .document(FirebaseAuth.getInstance().uid.toString())
-//            .get()
-//            .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-//                val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
-//
-//                if (model?.name.equals("")) {
-//                    nameEmailDialog.show()
-//                } else {
-//
-//                    if (ContextCompat.checkSelfPermission(
-//                            applicationContext,
-//                            Manifest.permission.ACCESS_FINE_LOCATION
-//                        ) == PackageManager.PERMISSION_GRANTED
-//                    ) {
-//                        val intent = Intent(this@PermissionActivity, MainActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
-//                    } else {
-//                        ActivityCompat.requestPermissions(
-//                            this@PermissionActivity,
-//                            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
-//                            ACCESS_FINE_LOCATION
-//                        )
-//                    }
-//
-//                }
-//            })
+        FirebaseFirestore.getInstance().collection("BRANCHES")
+            .document(FirebaseAuth.getInstance().uid.toString())
+            .get()
+            .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
+
+                if (model?.name.equals("")) {
+                    nameEmailDialog.show()
+                } else {
+
+                    if (ContextCompat.checkSelfPermission(
+                            applicationContext,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        if (!model?.storeName.equals("")){
+                                startActivity(Intent(this, DashboardActivity::class.java))
+                                finish()
+                            }else{
+                                val intent = Intent(
+                                    this@PermissionActivity,
+                                    MainActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
+                    } else {
+                        ActivityCompat.requestPermissions(
+                            this@PermissionActivity,
+                            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                            ACCESS_FINE_LOCATION
+                        )
+                    }
+
+                }
+            })
 
 
         submitBtn.setOnClickListener {
@@ -395,24 +403,24 @@ class PermissionActivity : AppCompatActivity() {
                         }
                 } else {
 
-                    FirebaseFirestore.getInstance().collection("BRANCHES")
-                        .document(FirebaseAuth.getInstance().uid.toString())
-                        .get()
-                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                            val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
-
-                            if (!model?.storeName.equals("")){
-                                startActivity(Intent(this, DashboardActivity::class.java))
-                                finish()
-                            }else{
-                                val intent = Intent(
-                                    this@PermissionActivity,
-                                    MainActivity::class.java
-                                )
-                                startActivity(intent)
-                                finish()
-                            }
-                        })
+//                    FirebaseFirestore.getInstance().collection("BRANCHES")
+//                        .document(FirebaseAuth.getInstance().uid.toString())
+//                        .get()
+//                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+//                            val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
+//
+//                            if (!model?.storeName.equals("")){
+//                                startActivity(Intent(this, DashboardActivity::class.java))
+//                                finish()
+//                            }else{
+//                                val intent = Intent(
+//                                    this@PermissionActivity,
+//                                    MainActivity::class.java
+//                                )
+//                                startActivity(intent)
+//                                finish()
+//                            }
+//                        })
 
                 }
 

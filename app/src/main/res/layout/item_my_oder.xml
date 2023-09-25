@@ -17,7 +17,6 @@
         android:backgroundTint="@color/white"
         android:elevation="3dp"
         android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -203,7 +202,8 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riderBg">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/canceledBtn"
@@ -235,4 +235,59 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/qty_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/neto_serif"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="italic"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/qty_text"
+        app:layout_constraintStart_toEndOf="@+id/qty_text"
+        app:layout_constraintTop_toTopOf="@+id/qty_text" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/riderBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yourPriceText">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/riderImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/avatara" />
+
+        <TextView
+            android:id="@+id/riderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pt_serif_regular"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toEndOf="@+id/riderImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/riderNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="#015CEF"
+            android:fontFamily="@font/poppins_regular"
+            app:layout_constraintStart_toEndOf="@+id/riderImage"
+            app:layout_constraintTop_toBottomOf="@+id/riderName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

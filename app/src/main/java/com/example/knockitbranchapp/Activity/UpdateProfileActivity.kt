@@ -59,7 +59,7 @@ class UpdateProfileActivity : AppCompatActivity() {
                     }
                     binding.name.text = Editable.Factory.getInstance().newEditable(userModel?.name.toString())
                     binding.email.text = userModel?.email
-                    binding.phone.text = "+91 "+userModel?.number
+                    binding.phone.text = userModel?.number
 
                 }
             }

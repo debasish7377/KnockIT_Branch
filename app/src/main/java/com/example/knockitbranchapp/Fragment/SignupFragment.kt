@@ -65,6 +65,7 @@ class SignupFragment : Fragment() {
                                             userData["deliveryTiming"] = ""
                                             userData["pendingPayment"] = 0
                                             userData["totalEarning"] = 0
+                                            userData["connectWithRider"] = ""
 
                                             userData["city"] = ""
                                             userData["country"] = ""

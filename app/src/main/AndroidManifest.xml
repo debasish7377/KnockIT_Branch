@@ -20,6 +20,9 @@
         android:theme="@style/Theme.KnockITBranchApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.WalletActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.UpdateProfileActivity"
             android:exported="false" />
         <activity

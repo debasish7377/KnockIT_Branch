@@ -1,12 +1,11 @@
 package com.example.knockitbranchapp.Model
 
-class BranchModel(
-    var storeId: String,
+class RiderModel(
+    var riderId: String,
     var name : String,
     var email: String,
     var profile: String,
-    var storeName: String,
-    var storeDescription: String,
+    var totalEarning: Long,
     var number: String,
     var city: String,
     var state: String,
@@ -15,23 +14,23 @@ class BranchModel(
     var address: String,
     var latitude: Float,
     var longitude: Float,
-    var storeCategory: String,
-    var storeImage: String,
-    var storeVerification: String,
-    var oderCompletionSize: String,
-    var deliveryTiming: String,
-    var timeStamp: Long,
-    var pendingPayment: Long,
-    var totalEarning: Long,
-    var connectWithRider: String,
+    var drivingLicence: String,
+    var drivingLicenceImage_1: String,
+    var drivingLicenceImage_2: String,
+    var driverAccount: String,
+    var bankAccountNumber: String,
+    var bankName: String,
+    var bankHolderName: String,
+    var bankIFSCCode: String,
+    var connectWithStore: String,
 ) {
+
     constructor() : this(
         "",
         "",
         "",
         "",
-        "",
-        "",
+        1,
         "",
         "",
         "",
@@ -45,9 +44,9 @@ class BranchModel(
         "",
         "",
         "",
-        1,
-        1,
-        1,
+        "",
+        "",
+        "",
         ""
     )
 }

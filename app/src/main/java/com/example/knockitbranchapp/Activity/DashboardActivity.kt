@@ -20,6 +20,7 @@ import com.example.knockitbranchapp.Fragment.CategoryFragment
 import com.example.knockitbranchapp.Fragment.HomeFragment
 import com.example.knockitbranchapp.Fragment.MyOderFragment
 import com.example.knockitbranchapp.Fragment.ProfileFragment
+import com.example.knockitbranchapp.Fragment.RiderFragment
 import com.example.knockitbranchapp.Fragment.WalletFragment
 import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.R
@@ -36,7 +37,8 @@ class DashboardActivity : AppCompatActivity() {
     val CATEGORY_FRAGMENT = 1
     val MY_ODER_FRAGMENT = 2
     val WALLET_FRAGMENT = 3
-    val PROFILE_FRAGMENT = 4
+    val PROFILE_FRAGMENT = 5
+    val RIDER_FRAGMENT = 4
     var CurrentFragment = -1
 
     lateinit var binding: ActivityDashbordBinding
@@ -106,13 +108,13 @@ class DashboardActivity : AppCompatActivity() {
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
                 }
 
-                R.id.wallet -> {
+                R.id.rider -> {
                     setCheckedChancel()
                     invalidateOptionsMenu()
-                    setFragment(WalletFragment(), WALLET_FRAGMENT)
+                    setFragment(RiderFragment(), RIDER_FRAGMENT)
                     item.isChecked = true
-                    window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.primary));
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                    window.setStatusBarColor(ContextCompat.getColor(this@DashboardActivity,R.color.white));
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
                 }
 
                 R.id.profile -> {
@@ -147,5 +149,10 @@ class DashboardActivity : AppCompatActivity() {
         binding.bottomNavigationView.getMenu().getItem(2).setChecked(false)
         binding.bottomNavigationView.getMenu().getItem(3).setChecked(false)
         binding.bottomNavigationView.getMenu().getItem(4).setChecked(false)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

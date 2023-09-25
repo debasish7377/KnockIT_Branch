@@ -20,11 +20,11 @@
         android:iconTint="@color/white"
         android:icon="@drawable/my_oder"/>
 
-    <item android:id="@+id/wallet"
-        android:title="Wallet"
+    <item android:id="@+id/rider"
+        android:title="Rider"
         app:showAsAction="ifRoom"
         android:iconTint="@color/white"
-        android:icon="@drawable/wallet"/>
+        android:icon="@drawable/rider"/>
 
     <item android:id="@+id/profile"
         android:title="Profile"

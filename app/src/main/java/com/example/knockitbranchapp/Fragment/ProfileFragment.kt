@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.example.knockitbranchapp.Activity.RegisterActivity
 import com.example.knockitbranchapp.Activity.UpdateProfileActivity
+import com.example.knockitbranchapp.Activity.WalletActivity
 import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.R
 import com.example.knockitbranchapp.databinding.FragmentProfileBinding
@@ -77,6 +78,10 @@ class ProfileFragment : Fragment() {
             )
             intent1.setPackage("com.android.vending")
             startActivity(intent1)
+        }
+
+        binding.wallet.setOnClickListener {
+            startActivity(Intent(getContext(), WalletActivity::class.java))
         }
         return binding.root
     }

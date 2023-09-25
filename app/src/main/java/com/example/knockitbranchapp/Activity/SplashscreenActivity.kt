@@ -11,7 +11,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import org.checkerframework.checker.units.qual.min
 
-
 class SplashscreenActivity : AppCompatActivity() {
     lateinit var firebaseAuth: FirebaseAuth
 

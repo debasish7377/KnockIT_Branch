@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
+import com.example.knockitbranchapp.Activity.DashboardActivity
 import com.example.knockitbranchapp.Activity.PermissionActivity
 import com.example.knockitbranchapp.Activity.RegisterActivity
 import com.example.knockitbranchapp.R
@@ -51,7 +52,7 @@ class LoginFragment : Fragment() {
                         .addOnCompleteListener() { task ->
                             if (task.isSuccessful) {
                                 binding.progressBar.visibility = View.GONE
-                                startActivity(Intent(context, PermissionActivity::class.java))
+                                startActivity(Intent(context, DashboardActivity::class.java))
                                 requireActivity().finish()
                                 Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
                             } else {

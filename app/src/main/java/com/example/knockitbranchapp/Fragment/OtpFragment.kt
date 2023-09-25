@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.example.knockitbranchapp.Activity.DashboardActivity
 import com.example.knockitbranchapp.Activity.PermissionActivity
 import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.R
@@ -169,7 +170,7 @@ class OtpFragment : Fragment() {
                                     startActivity(
                                         Intent(
                                             context,
-                                            PermissionActivity::class.java
+                                            DashboardActivity::class.java
                                         )
                                     )
                                     requireActivity().finish()

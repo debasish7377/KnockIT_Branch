@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.knockitbranchapp.Adapter.MyOderAdapter
 import com.example.knockitbranchapp.Adapter.RiderAdapter
+import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.Model.MyOderModel
 import com.example.knockitbranchapp.Model.RiderModel
 import com.google.android.gms.tasks.OnSuccessListener
@@ -40,13 +41,25 @@ class RiderDatabase {
                             val model = document.toObject(RiderModel::class.java)
                             riderItems.add(model)
 
-                            riderModel.clear()
-                            for (p in riderItems) {
-                                if (p.connectWithStore.equals("")) {
-                                    riderModel.add(p)
-                                }
-                            }
-                            riderAdapter.notifyDataSetChanged()
+                            ////// Location wise rider Display
+                            FirebaseFirestore.getInstance().collection("BRANCHES")
+                                .document(FirebaseAuth.getInstance().uid.toString())
+                                .get()
+                                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                                    val model: BranchModel? =
+                                        documentSnapshot.toObject(BranchModel::class.java)
+
+                                    riderModel.clear()
+                                    for (p in riderItems) {
+                                        if (p.city.equals(model?.city)) {
+                                            if (p.connectWithStore.equals("")) {
+                                                riderModel.add(p)
+                                            }
+                                        }
+                                    }
+                                    riderAdapter.notifyDataSetChanged()
+                                })
+                            ////// Location wise rider Display
                         }
                     }
                 }

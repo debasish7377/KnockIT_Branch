@@ -24,6 +24,10 @@ class BranchModel(
     var pendingPayment: Long,
     var totalEarning: Long,
     var connectWithRider: String,
+    var bankAccountNumber: String,
+    var bankName: String,
+    var bankHolderName: String,
+    var bankIFSCCode: String,
 ) {
     constructor() : this(
         "",
@@ -48,6 +52,10 @@ class BranchModel(
         1,
         1,
         1,
+        "",
+        "",
+        "",
+        "",
         ""
     )
 }

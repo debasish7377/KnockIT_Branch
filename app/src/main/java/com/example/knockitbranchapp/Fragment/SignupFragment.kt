@@ -67,6 +67,11 @@ class SignupFragment : Fragment() {
                                             userData["totalEarning"] = 0
                                             userData["connectWithRider"] = ""
 
+                                            userData["bankAccountNumber"] = ""
+                                            userData["bankName"] = ""
+                                            userData["bankHolderName"] = ""
+                                            userData["bankIFSCCode"] = ""
+
                                             userData["city"] = ""
                                             userData["country"] = ""
                                             userData["state"] = ""

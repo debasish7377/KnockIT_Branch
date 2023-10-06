@@ -58,7 +58,7 @@ class RiderAdapter(var context: Context, var model: List<RiderModel>) :
         ////////////////canceled dialog
         riderConnectingDialog = Dialog(context)
         riderConnectingDialog.setContentView(R.layout.dialog_rider_connecting)
-        riderConnectingDialog.setCancelable(false)
+        riderConnectingDialog.setCancelable(true)
         riderConnectingDialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.btn_buy_now))
         riderConnectingDialog.window?.setLayout(
             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -71,9 +71,10 @@ class RiderAdapter(var context: Context, var model: List<RiderModel>) :
             FirebaseFirestore.getInstance()
                 .collection("BRANCHES")
                 .document(FirebaseAuth.getInstance().uid.toString())
-                .addSnapshotListener { querySnapshot: DocumentSnapshot?, e: FirebaseFirestoreException? ->
-                    querySnapshot?.let {
-                        val userModel = it.toObject(BranchModel::class.java)
+                .get()
+                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                    val userModel: BranchModel? =
+                        documentSnapshot.toObject(BranchModel::class.java)
 
                         if (userModel?.connectWithRider.equals("")) {
                             riderConnectingDialog.show()
@@ -100,8 +101,7 @@ class RiderAdapter(var context: Context, var model: List<RiderModel>) :
                                 .show()
                         }
 
-                    }
-                }
+                    })
         }
 
         FirebaseFirestore.getInstance()

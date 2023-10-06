@@ -88,27 +88,12 @@ class UpdateProductActivity : AppCompatActivity() {
             })
 
         binding.addImage.setOnClickListener {
-            Dexter.withContext(this@UpdateProductActivity)
-                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(object : PermissionListener {
-                    override fun onPermissionGranted(permissionGrantedResponse: PermissionGrantedResponse) {
-                        val intent = Intent(Intent.ACTION_PICK)
-                        intent.type = "image/*"
-                        startActivityForResult(
-                            Intent.createChooser(intent, "Select Picture"),
-                            1
-                        )
-                    }
-
-                    override fun onPermissionDenied(permissionDeniedResponse: PermissionDeniedResponse) {}
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissionRequest: PermissionRequest?,
-                        permissionToken: PermissionToken
-                    ) {
-                        permissionToken.continuePermissionRequest()
-                    }
-                })
-                .check()
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(
+                Intent.createChooser(intent, "Select Picture"),
+                1
+            )
         }
 
         FirebaseFirestore.getInstance().collection("BRANCHES")

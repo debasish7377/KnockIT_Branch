@@ -43,7 +43,7 @@ class NotificationAdapter(var context: Context, var model: List<NotificationMode
         val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
         val netDate = Date(model[position].timeStamp)
         val date = sdf.format(netDate)
-        holder.timing.text = "Valid - " + date
+        holder.timing.text = "Dt - " + date
         if (!model[position].payment.toString().equals("")){
             holder.paymentText.visibility = View.VISIBLE
             holder.paymentText.text = model[position].payment.toString()

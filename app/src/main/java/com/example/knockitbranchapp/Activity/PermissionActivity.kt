@@ -263,12 +263,24 @@ class PermissionActivity : AppCompatActivity() {
                                                         Manifest.permission.ACCESS_FINE_LOCATION
                                                     ) == PackageManager.PERMISSION_GRANTED
                                                 ) {
-                                                    val intent = Intent(
-                                                        this@PermissionActivity,
-                                                        MainActivity::class.java
-                                                    )
-                                                    startActivity(intent)
-                                                    finish()
+                                                    FirebaseFirestore.getInstance().collection("BRANCHES")
+                                                        .document(FirebaseAuth.getInstance().uid.toString())
+                                                        .get()
+                                                        .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+                                                            val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
+
+                                                            if (!model?.storeName.equals("")){
+                                                                startActivity(Intent(this, DashboardActivity::class.java))
+                                                                finish()
+                                                            }else{
+                                                                val intent = Intent(
+                                                                    this@PermissionActivity,
+                                                                    MainActivity::class.java
+                                                                )
+                                                                startActivity(intent)
+                                                                finish()
+                                                            }
+                                                        })
                                                 } else {
                                                     ActivityCompat.requestPermissions(
                                                         this@PermissionActivity,

@@ -21,7 +21,7 @@ class MyOderModel(
     var couponId: String,
     var delivery: String,
     var payment: String,
-    var oderConfirmedDate: String,
+    var orderConfirmedDate: String,
     var shippedDate: String,
     var outForDeliveryDate: String,
     var deliveredDate: String,
@@ -30,7 +30,9 @@ class MyOderModel(
     var riderId: String,
     var ratingProduct: String,
     var name: String,
-    var number: String
+    var number: String,
+    var deliveryPrice: String,
+    var userToken: String,
 ) {
 
     constructor(): this(
@@ -50,6 +52,8 @@ class MyOderModel(
         1,
         "",
         1,
+        "",
+        "",
         "",
         "",
         "",

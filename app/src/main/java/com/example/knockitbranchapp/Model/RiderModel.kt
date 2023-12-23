@@ -23,6 +23,7 @@ class RiderModel(
     var bankHolderName: String,
     var bankIFSCCode: String,
     var connectWithStore: String,
+    var token: String,
 ) {
 
     constructor() : this(
@@ -39,6 +40,7 @@ class RiderModel(
         "",
         1F,
         1F,
+        "",
         "",
         "",
         "",

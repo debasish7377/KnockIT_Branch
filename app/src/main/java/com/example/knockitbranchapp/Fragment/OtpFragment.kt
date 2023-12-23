@@ -125,7 +125,7 @@ class OtpFragment : Fragment() {
                                     userData["storeCategory"] = ""
                                     userData["storeImage"] = ""
                                     userData["storeVerification"] = ""
-                                    userData["oderCompletionSize"] = ""
+                                    userData["orderCompletionSize"] = ""
                                     userData["deliveryTiming"] = ""
                                     userData["pendingPayment"] = 0
                                     userData["totalEarning"] = 0
@@ -144,6 +144,7 @@ class OtpFragment : Fragment() {
                                     userData["latitude"] = 0
                                     userData["longitude"] = 0
                                     userData["timeStamp"] = System.currentTimeMillis()
+                                    userData["token"] = ""
 
                                     FirebaseFirestore.getInstance().collection("BRANCHES")
                                         .document(auth.uid.toString())

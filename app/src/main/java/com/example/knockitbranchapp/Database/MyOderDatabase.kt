@@ -21,28 +21,28 @@ class MyOderDatabase {
     companion object {
 
         fun loadMyOder(context: Context, myOderRecyclerView: RecyclerView, deliveryText: String) {
-            var oderModel: ArrayList<MyOderModel> = ArrayList<MyOderModel>()
-            var CartAdapter = MyOderAdapter(context!!, oderModel)
+            var orderModel: ArrayList<MyOderModel> = ArrayList<MyOderModel>()
+            var CartAdapter = MyOderAdapter(context!!, orderModel)
             val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
             myOderRecyclerView.layoutManager = layoutManager
             myOderRecyclerView.adapter = CartAdapter
-            var oderItems: ArrayList<MyOderModel> = ArrayList<MyOderModel>()
+            var orderItems: ArrayList<MyOderModel> = ArrayList<MyOderModel>()
 
             FirebaseFirestore.getInstance()
-                .collection("ODER")
+                .collection("ORDER")
                 .orderBy("timeStamp", Query.Direction.DESCENDING)
                 .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
                     querySnapshot?.let {
-                        oderItems.clear()
+                        orderItems.clear()
                         for (document in it) {
                             val model = document.toObject(MyOderModel::class.java)
-                            oderItems.add(model)
+                            orderItems.add(model)
 
-                            oderModel.clear()
-                            for (p in oderItems){
+                            orderModel.clear()
+                            for (p in orderItems){
                                 if (p.storeId.equals(FirebaseAuth.getInstance().uid)){
                                     if (p.delivery.equals(deliveryText)) {
-                                        oderModel.add(p)
+                                        orderModel.add(p)
                                     }
                                 }
                             }

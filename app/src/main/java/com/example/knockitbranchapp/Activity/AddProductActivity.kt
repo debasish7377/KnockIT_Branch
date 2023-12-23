@@ -134,7 +134,6 @@ class AddProductActivity : AppCompatActivity() {
                 val model: BranchModel? = documentSnapshot.toObject(BranchModel::class.java)
 
                 binding.addProducts.city1.text = model?.city.toString()
-            })
 
         binding.addProducts.OkBtn.setOnClickListener {
             binding.addProducts.OkBtn.visibility = View.GONE
@@ -145,10 +144,18 @@ class AddProductActivity : AppCompatActivity() {
                         if (!binding.addProducts.brandName.text.toString().isEmpty()) {
                             if (!binding.addProducts.selectCategory.text.toString().isEmpty()) {
                                 if (!binding.addProducts.subCategory.text.toString().isEmpty()) {
-                                    if (!binding.addProducts.OriginalPrice.text.toString().isEmpty()) {
-                                        if (!binding.addProducts.discountedPrice.text.toString().isEmpty()) {
-                                            if (!binding.addProducts.city1.text.toString().isEmpty()) {
-                                                if (!binding.addProducts.productSearch.text.toString().isEmpty()) {
+                                    if (!binding.addProducts.OriginalPrice.text.toString()
+                                            .isEmpty()
+                                    ) {
+                                        if (!binding.addProducts.discountedPrice.text.toString()
+                                                .isEmpty()
+                                        ) {
+                                            if (!binding.addProducts.city1.text.toString()
+                                                    .isEmpty()
+                                            ) {
+                                                if (!binding.addProducts.productSearch.text.toString()
+                                                        .isEmpty()
+                                                ) {
 
                                                     loadingDialog.show()
                                                     var tagArray: List<String> =
@@ -167,52 +174,34 @@ class AddProductActivity : AppCompatActivity() {
                                                             reference.downloadUrl.addOnSuccessListener { productImage ->
 
                                                                 val randomString = UUID.randomUUID().toString().substring(0, 15)
-                                                                val userData: MutableMap<Any, Any?> =
-                                                                    HashMap()
-                                                                userData["city_1"] =
-                                                                    binding.addProducts.city1.text.toString()
-                                                                userData["city_2"] =
-                                                                    binding.addProducts.city2.text.toString()
-                                                                userData["city_3"] =
-                                                                    binding.addProducts.city3.text.toString()
-                                                                userData["city_4"] =
-                                                                    binding.addProducts.city4.text.toString()
-                                                                userData["city_5"] =
-                                                                    binding.addProducts.city5.text.toString()
+                                                                val userData: MutableMap<Any, Any?> = HashMap()
+                                                                userData["city_1"] = binding.addProducts.city1.text.toString()
+                                                                userData["city_2"] = binding.addProducts.city2.text.toString()
+                                                                userData["city_3"] = binding.addProducts.city3.text.toString()
+                                                                userData["city_4"] = binding.addProducts.city4.text.toString()
+                                                                userData["city_5"] = binding.addProducts.city5.text.toString()
 
                                                                 userData["id"] = randomString.toString()
-                                                                userData["productBrandName"] =
-                                                                    binding.addProducts.brandName.text.toString()
-                                                                userData["productTitle"] =
-                                                                    binding.productTitle.text.toString()
-                                                                userData["productCategory"] =
-                                                                    binding.addProducts.selectCategory.text.toString()
-                                                                userData["productCuttedPrice"] =
-                                                                    binding.addProducts.OriginalPrice.text.toString()
-                                                                        .toLong()
-                                                                userData["productDescription"] =
-                                                                    binding.productDescription.text.toString()
-                                                                userData["productImage"] =
-                                                                    productImage.toString()
-                                                                userData["productPrice"] =
-                                                                    binding.addProducts.discountedPrice.text.toString()
-                                                                        .toLong()
+                                                                userData["productBrandName"] = binding.addProducts.brandName.text.toString()
+                                                                userData["productTitle"] = binding.productTitle.text.toString()
+                                                                userData["productCategory"] = binding.addProducts.selectCategory.text.toString()
+                                                                userData["productCuttedPrice"] = binding.addProducts.OriginalPrice.text.toString().toLong()
+                                                                userData["productDescription"] = binding.productDescription.text.toString()
+                                                                userData["productImage"] = productImage.toString()
+                                                                userData["productPrice"] = binding.addProducts.discountedPrice.text.toString().toLong()
                                                                 userData["productRating"] = "0"
                                                                 userData["productSearch"] = tags
-                                                                userData["productSubCategory"] =
-                                                                    binding.addProducts.subCategory.text.toString()
+                                                                userData["productSubCategory"] = binding.addProducts.subCategory.text.toString()
                                                                 userData["productTotalRating"] = "0"
-                                                                userData["productVerification"] =
-                                                                    "Private"
-                                                                userData["storeId"] =
-                                                                    FirebaseAuth.getInstance().uid.toString()
+                                                                userData["productVerification"] = "Private"
+                                                                userData["storeId"] = FirebaseAuth.getInstance().uid.toString()
                                                                 userData["rating_1"] = "0"
                                                                 userData["rating_2"] = "0"
                                                                 userData["rating_3"] = "0"
                                                                 userData["rating_4"] = "0"
                                                                 userData["rating_5"] = "0"
-                                                                userData["timeStamp"] =
-                                                                    System.currentTimeMillis()
+                                                                userData["timeStamp"] = System.currentTimeMillis()
+                                                                userData["storeToken"] = model?.token.toString()
 
                                                                 FirebaseFirestore.getInstance()
                                                                     .collection("PRODUCTS")
@@ -227,8 +216,14 @@ class AddProductActivity : AppCompatActivity() {
                                                                                 "Add Product Images",
                                                                                 Toast.LENGTH_SHORT
                                                                             ).show()
-                                                                            var intent = Intent(this, AddProductImages::class.java)
-                                                                            intent.putExtra("productId", randomString)
+                                                                            var intent = Intent(
+                                                                                this,
+                                                                                AddProductImages::class.java
+                                                                            )
+                                                                            intent.putExtra(
+                                                                                "productId",
+                                                                                randomString
+                                                                            )
                                                                             startActivity(intent)
                                                                             finish()
                                                                             binding.addProducts.OkBtn.visibility =
@@ -310,6 +305,8 @@ class AddProductActivity : AppCompatActivity() {
             }
 
         }
+    })
+
     }
 
 

@@ -15,7 +15,7 @@
         android:icon="@drawable/category"/>
 
     <item android:id="@+id/my_oder"
-        android:title="My Oder"
+        android:title="My Order"
         app:showAsAction="ifRoom"
         android:iconTint="@color/white"
         android:icon="@drawable/my_oder"/>

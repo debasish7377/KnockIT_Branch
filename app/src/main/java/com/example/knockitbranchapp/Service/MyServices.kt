@@ -32,7 +32,7 @@ import javax.annotation.Nullable
 internal class MyServices : Service() {
     var alarmHour: Long? = null
     var alarmMinute: Long? = null
-    private var ringtone: Ringtone? = null
+
     private val t = Timer()
     var timeStamp: Long? = null
     lateinit var productTitle: String
@@ -43,6 +43,7 @@ internal class MyServices : Service() {
         private const val CHANNEL_ID = "MyNotificationChannelID"
         private const val CHANNEL_ID_2 = "MyNotification"
         private const val NOTIFICATION_ID = 100
+        lateinit var ringtone: Ringtone
     }
 
     @Nullable
@@ -55,7 +56,7 @@ internal class MyServices : Service() {
 //        alarmHour = intent.getLongExtra("alarmHour", 0);
 //        alarmMinute = intent.getLongExtra("alarmMinute", 0);
         FirebaseFirestore.getInstance()
-            .collection("OderNotification")
+            .collection("OrderNotification")
             .document(FirebaseAuth.getInstance().uid.toString())
             .addSnapshotListener { value, error ->
                 timeStamp = value?.getLong("timeStamp")
@@ -150,7 +151,7 @@ internal class MyServices : Service() {
                                                     .setLargeIcon(image)
                                                     .setSmallIcon(R.drawable.star_on)
                                                     .setContentTitle("₹" + productPrice)
-                                                    .setSubText("Your Oder")
+                                                    .setSubText("Your Order")
                                                     .setContentText(productTitle)
                                                     .setChannelId(CHANNEL_ID_2)
                                                     .setContentIntent(pendingIntent)

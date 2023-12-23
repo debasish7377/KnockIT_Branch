@@ -5,10 +5,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.knockitbranchapp.Adapter.MyOderAdapter
 import com.example.knockitbranchapp.Adapter.RiderAdapter
 import com.example.knockitbranchapp.Model.BranchModel
-import com.example.knockitbranchapp.Model.MyOderModel
 import com.example.knockitbranchapp.Model.RiderModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth

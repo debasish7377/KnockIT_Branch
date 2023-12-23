@@ -1,5 +1,6 @@
 package com.example.knockitbranchapp.Adapter
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import java.util.UUID
 
 class ProductsAdapter(var context: Context, var model: List<ProductModel>) :
     RecyclerView.Adapter<ProductsAdapter.viewHolder>() {
@@ -69,6 +71,39 @@ class ProductsAdapter(var context: Context, var model: List<ProductModel>) :
             context.startActivity(intent)
         }
 
+        holder.deleteProduct.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Delete")
+            builder.setMessage("Are you sure to delete product ?")
+
+            builder.setPositiveButton("Yes") { dialog, which ->
+
+                val randomString = UUID.randomUUID().toString().substring(0, 15)
+                val userData: MutableMap<String, Any?> =
+                    HashMap()
+                userData["productVerification"] = "Removed"
+
+                FirebaseFirestore.getInstance()
+                    .collection("PRODUCTS")
+                    .document(model[position].id)
+                    .update(userData)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            notifyDataSetChanged()
+                            Toast.makeText(context, "Product Deleted Successfully", Toast.LENGTH_SHORT).show()
+                        } else {
+
+                        }
+                    }
+
+            }
+
+            builder.setNegativeButton("No") { dialog, which ->
+            }
+            builder.show()
+            true
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -93,6 +128,7 @@ class ProductsAdapter(var context: Context, var model: List<ProductModel>) :
         var addToCardBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.btn_add_card)
         var miniProductImage: ImageView = itemView.findViewById<ImageView?>(R.id.mini_product_image)
         var selectQuantity: LinearLayout = itemView.findViewById<LinearLayout?>(R.id.select_qty)
+        var deleteProduct: LinearLayout = itemView.findViewById<LinearLayout?>(R.id.deleteProduct)
 
     }
 }

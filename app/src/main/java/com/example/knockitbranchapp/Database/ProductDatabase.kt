@@ -62,7 +62,9 @@ class ProductDatabase {
                                     productModel.clear()
                                     for (p in products) {
                                         if (p.storeId.equals(model?.storeId)){
-                                            productModel.add(p)
+                                            if (p.productVerification.equals("Public")) {
+                                                productModel.add(p)
+                                            }
                                         }
 
                                     }

@@ -18,7 +18,7 @@ class BranchModel(
     var storeCategory: String,
     var storeImage: String,
     var storeVerification: String,
-    var oderCompletionSize: String,
+    var orderCompletionSize: String,
     var deliveryTiming: String,
     var timeStamp: Long,
     var pendingPayment: Long,
@@ -28,6 +28,7 @@ class BranchModel(
     var bankName: String,
     var bankHolderName: String,
     var bankIFSCCode: String,
+    var token: String,
 ) {
     constructor() : this(
         "",
@@ -56,6 +57,7 @@ class BranchModel(
         "",
         "",
         "",
-        ""
+        "",
+        "",
     )
 }

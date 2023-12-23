@@ -61,7 +61,7 @@ class SignupFragment : Fragment() {
                                             userData["storeCategory"] = ""
                                             userData["storeImage"] = ""
                                             userData["storeVerification"] = ""
-                                            userData["oderCompletionSize"] = ""
+                                            userData["orderCompletionSize"] = ""
                                             userData["deliveryTiming"] = ""
                                             userData["pendingPayment"] = 0
                                             userData["totalEarning"] = 0
@@ -80,6 +80,7 @@ class SignupFragment : Fragment() {
                                             userData["latitude"] = 0
                                             userData["longitude"] = 0
                                             userData["timeStamp"] = System.currentTimeMillis()
+                                            userData["token"] = ""
 
                                             firebaseFirestore.collection("BRANCHES")
                                                 .document(auth.uid.toString())

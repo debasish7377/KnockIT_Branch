@@ -198,6 +198,43 @@ class HomeFragment : Fragment() {
                             binding.storeConnection.storeNumber.text = number
                             binding.storeConnection.storeNumber.visibility =
                                 View.INVISIBLE
+
+                            binding.storeConnection.OkBtn.setOnClickListener {
+                                val builder = AlertDialog.Builder(context)
+                                builder.setTitle("Store")
+                                builder.setMessage("Your order completed ?")
+
+                                builder.setPositiveButton("Yes") { dialog, which ->
+                                    val userData: MutableMap<String, Any?> = HashMap()
+                                    userData["connectWithStore"] = ""
+                                    FirebaseFirestore.getInstance()
+                                        .collection("RIDERS")
+                                        .document(connectWithRider.toString())
+                                        .update(userData)
+                                        .addOnCompleteListener {
+                                            val userData: MutableMap<String, Any?> =
+                                                HashMap()
+                                            userData["connectWithRider"] = ""
+                                            FirebaseFirestore.getInstance()
+                                                .collection("BRANCHES")
+                                                .document(FirebaseAuth.getInstance().uid.toString())
+                                                .update(userData)
+                                                .addOnCompleteListener {
+                                                    if (it.isSuccessful) {
+                                                        Toast.makeText(context, "Rider Disconnected", Toast.LENGTH_SHORT).show()
+                                                    } else {
+
+                                                    }
+                                                }
+                                        }
+                                }
+                                builder.setNegativeButton("No") { dialog, which ->
+                                }
+
+                                builder.show()
+
+                            }
+
                             try {
                                 Glide.with(context!!).load(storeOwnerProfile)
                                     .placeholder(R.drawable.avatara)

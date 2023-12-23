@@ -24,11 +24,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.knockitbranchapp.Model.BranchModel
 import com.example.knockitbranchapp.Model.MyOderModel
 import com.example.knockitbranchapp.Model.UserModel
 import com.example.knockitbranchapp.R
+import com.example.knockitbranchapp.Service.MyServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -38,15 +45,25 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import de.hdodenhof.circleimageview.CircleImageView
+import org.json.JSONObject
 import java.util.UUID
+import javax.xml.transform.ErrorListener
+import javax.xml.transform.TransformerException
 
 
 class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
     RecyclerView.Adapter<MyOderAdapter.viewHolder>() {
 
+    lateinit var myOrderDialog: Dialog
     lateinit var canceledDialog: Dialog
     lateinit var canceledText: EditText
     lateinit var okBtn: AppCompatButton
+    lateinit var orderOkBtn: AppCompatButton
+
+    lateinit var userName: TextView
+    lateinit var userCity: TextView
+    lateinit var userAddress: TextView
+    lateinit var userPhone: TextView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
         var view: View = LayoutInflater.from(context).inflate(R.layout.item_my_oder, parent, false)
         return viewHolder(view)
@@ -78,13 +95,43 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         okBtn = canceledDialog.findViewById(R.id.okBtn)
         ////////////////canceled dialog
 
+        ////////////////canceled dialog
+        myOrderDialog = Dialog(context)
+        myOrderDialog.setContentView(R.layout.dialog_my_order)
+        myOrderDialog.setCancelable(false)
+        myOrderDialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.btn_buy_now))
+        myOrderDialog.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        orderOkBtn = myOrderDialog.findViewById(R.id.okBtn)
+        userName = myOrderDialog.findViewById(R.id.userName)
+        userAddress = myOrderDialog.findViewById(R.id.userAddress)
+        userPhone = myOrderDialog.findViewById(R.id.userPhone)
+        userCity = myOrderDialog.findViewById(R.id.userCity)
+
+        holder.itemView.setOnClickListener {
+            myOrderDialog.show()
+            userName.text = "User Name - "+model[position].name.toString()
+            userAddress.text = "User Address - "+model[position].address.toString()
+            userCity.text = "User City - "+model[position].city.toString()
+            userPhone.text = "User Phone - "+model[position].number.toString()
+        }
+        orderOkBtn.setOnClickListener {
+            myOrderDialog.dismiss()
+        }
+        ////////////////canceled dialog
+
         holder.productTitle.text = model[position].productTitle
         holder.productPrice.text = model[position].productPrice.toString()
         holder.productCuttedPrice.text = model[position].productCuttedPrice.toString()
         holder.yourPrice.text = model[position].price.toString()
         holder.qty_text.text = model[position].qty
         holder.qty_no.text = "qty : " + model[position].qtyNo.toString()
+        holder.userName.text = "User Name : " + model[position].name.toString()
         holder.userUid.text = model[position].uid
+        holder.deliveryPrice.text = "Delivery Price : "+ model[position].deliveryPrice
+        holder.orderPayment.text = "Payment : "+ model[position].payment
         var youSaved: String =
             (model[position].productCuttedPrice.toInt() - model[position].productPrice.toInt()).toString()
         holder.discountedPrice.text = "₹" + youSaved + " Saved"
@@ -114,21 +161,22 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         }
 
         holder.canceledBtn.setOnClickListener {
+            MyServices.ringtone.stop()
             if (model[position].delivery.equals("Canceled")) {
-                Toast.makeText(context, "Oder already Canceled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Order already Canceled", Toast.LENGTH_SHORT).show()
             } else if (model[position].delivery.equals("Pending")) {
                 canceledDialog.show()
                 FirebaseFirestore.getInstance()
-                    .collection("OderNotification")
+                    .collection("OrderNotification")
                     .document(FirebaseAuth.getInstance().uid.toString())
                     .delete()
                 val randomString = UUID.randomUUID().toString().substring(0, 18)
                 val userData1: MutableMap<String, Any?> =
                     HashMap()
                 userData1["id"] = randomString
-                userData1["title"] = "Oder Canceled"
+                userData1["title"] = "Order Canceled"
                 userData1["description"] =
-                    "Your Oder " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Canceled by you"
+                    "Your Order " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Canceled by you"
                 userData1["payment"] = ""
                 userData1["timeStamp"] = System.currentTimeMillis()
                 userData1["read"] = "true"
@@ -169,9 +217,9 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                 val userData1: MutableMap<String, Any?> =
                     HashMap()
                 userData1["id"] = randomString
-                userData1["title"] = "Oder Canceled"
+                userData1["title"] = "Order Canceled"
                 userData1["description"] =
-                    "Your Oder " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Canceled by you"
+                    "Your Order " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Canceled by you"
                 userData1["payment"] = holder.yourPrice.text.toString() + " Payment Canceled"
                 userData1["timeStamp"] = System.currentTimeMillis()
                 userData1["read"] = "true"
@@ -193,21 +241,21 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         okBtn.setOnClickListener {
             if (!canceledText.text.toString().equals("")) {
                 val builder = AlertDialog.Builder(context)
-                builder.setTitle("Oder")
-                builder.setMessage("Are you sure to cancel this oder ?")
+                builder.setTitle("Order")
+                builder.setMessage("Are you sure to cancel this order ?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
 
                     canceledDialog.dismiss()
                     FirebaseFirestore.getInstance()
-                        .collection("OderNotification")
+                        .collection("OrderNotification")
                         .document(FirebaseAuth.getInstance().uid.toString())
                         .delete()
                     val randomString = UUID.randomUUID().toString().substring(0, 18)
                     val userData1: MutableMap<String, Any?> =
                         HashMap()
                     userData1["id"] = randomString
-                    userData1["title"] = "Oder Canceled"
+                    userData1["title"] = "Order Canceled"
                     userData1["description"] = canceledText.text.toString()
                     userData1["timeStamp"] = System.currentTimeMillis()
                     userData1["read"] = "true"
@@ -221,6 +269,11 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         .addOnCompleteListener {
 
                         }
+
+                    sendNotification(
+                        "Order Canceled", canceledText.text.toString(),
+                        model[position].userToken.toString()
+                    )
 
                     FirebaseFirestore.getInstance().collection("USERS")
                         .document(model[position].uid)
@@ -247,12 +300,12 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                         HashMap()
                     userData["delivery"] = "Canceled"
                     FirebaseFirestore.getInstance()
-                        .collection("ODER")
+                        .collection("ORDER")
                         .document(model[position].id)
                         .update(userData)
                         .addOnCompleteListener {
                             notifyDataSetChanged()
-                            Toast.makeText(context, "Oder Canceled", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Order Canceled", Toast.LENGTH_SHORT).show()
                         }
 
                 }
@@ -267,23 +320,23 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         }
 
         if (model[position].delivery.equals("Pending")) {
-            holder.deliveryBtn.text = "Oder confirmed"
+            holder.deliveryBtn.text = "Order confirmed"
 
-            /////Oder Confirmed Notification
+            /////Order Confirmed Notification
             holder.deliveryBtn.setOnClickListener {
-
+                MyServices.ringtone.stop()
                 val builder = AlertDialog.Builder(context)
-                builder.setTitle("Oder")
-                builder.setMessage("Are you sure to confirm this oder ?")
+                builder.setTitle("Order")
+                builder.setMessage("Are you sure to confirm this order ?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
 
                     FirebaseFirestore.getInstance()
-                        .collection("OderNotification")
+                        .collection("OrderNotification")
                         .document(FirebaseAuth.getInstance().uid.toString())
                         .delete()
 
-                    //////Oder pending payment
+                    //////Order pending payment
                     FirebaseFirestore.getInstance().collection("BRANCHES")
                         .document(model[position].storeId)
                         .get()
@@ -304,18 +357,23 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                                 }
 
                         })
-                    //////Oder pending payment
+                    //////Order pending payment
 
                     val randomString1 = UUID.randomUUID().toString().substring(0, 18)
                     val userData2: MutableMap<String, Any?> =
                         HashMap()
                     userData2["id"] = randomString1
-                    userData2["title"] = "Oder Confirmed"
+                    userData2["title"] = "Order Confirmed"
                     userData2["description"] =
-                        "Your Oder " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Confirmed"
+                        "Your Order " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Confirmed"
                     userData2["payment"] = holder.yourPrice.text.toString() + " Payment Pending"
                     userData2["timeStamp"] = System.currentTimeMillis()
                     userData2["read"] = "true"
+
+                    sendNotification(
+                        "Order Confirmed", "Your Order Confirmed",
+                        model[position].userToken.toString()
+                    )
 
                     FirebaseFirestore.getInstance()
                         .collection("BRANCHES")
@@ -331,9 +389,9 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                     val userData1: MutableMap<String, Any?> =
                         HashMap()
                     userData1["id"] = randomString
-                    userData1["title"] = "Oder Confirmed"
+                    userData1["title"] = "Order Confirmed"
                     userData1["description"] =
-                        "Your Oder " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Confirmed"
+                        "Your Order " + holder.productTitle.text.toString() + " and price ₹" + holder.yourPrice.text.toString() + " Confirmed"
                     userData1["timeStamp"] = System.currentTimeMillis()
                     userData1["read"] = "true"
 
@@ -367,21 +425,21 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                                 }
 
                         })
-                    /////Oder Confirmed Notification
+                    /////Order Confirmed Notification
 
 
                     val userData: MutableMap<String, Any?> =
                         HashMap()
-                    userData["delivery"] = "Oder confirmed"
-                    userData["oderConfirmedDate"] = System.currentTimeMillis().toString()
+                    userData["delivery"] = "Order confirmed"
+                    userData["orderConfirmedDate"] = System.currentTimeMillis().toString()
                     FirebaseFirestore.getInstance()
-                        .collection("ODER")
+                        .collection("ORDER")
                         .document(model[position].id)
                         .update(userData)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 notifyDataSetChanged()
-                                Toast.makeText(context, "Oder confirmed", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Order confirmed", Toast.LENGTH_SHORT).show()
                             } else {
 
                             }
@@ -394,14 +452,14 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 
                 builder.show()
             }
-        } else if (model[position].delivery.equals("Oder confirmed")) {
+        } else if (model[position].delivery.equals("Order confirmed")) {
             holder.deliveryBtn.text = "Shipped"
 
             holder.deliveryBtn.setOnClickListener {
 
                 val builder = AlertDialog.Builder(context)
-                builder.setTitle("Oder")
-                builder.setMessage("Oder shipped ?")
+                builder.setTitle("Order")
+                builder.setMessage("Order shipped ?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
 
@@ -410,13 +468,13 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                     userData["delivery"] = "Shipped"
                     userData["shippedDate"] = System.currentTimeMillis().toString()
                     FirebaseFirestore.getInstance()
-                        .collection("ODER")
+                        .collection("ORDER")
                         .document(model[position].id)
                         .update(userData)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 notifyDataSetChanged()
-                                Toast.makeText(context, "Oder Shipped", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Order Shipped", Toast.LENGTH_SHORT).show()
                             } else {
 
                             }
@@ -436,7 +494,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
             holder.deliveryBtn.setOnClickListener {
 
                 val builder = AlertDialog.Builder(context)
-                builder.setTitle("Oder")
+                builder.setTitle("Order")
                 builder.setMessage("Out for delivery ?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
@@ -446,13 +504,13 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                     userData["delivery"] = "Out for delivery"
                     userData["outForDeliveryDate"] = System.currentTimeMillis().toString()
                     FirebaseFirestore.getInstance()
-                        .collection("ODER")
+                        .collection("ORDER")
                         .document(model[position].id)
                         .update(userData)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 notifyDataSetChanged()
-                                Toast.makeText(context, "Oder Out for delivery", Toast.LENGTH_SHORT)
+                                Toast.makeText(context, "Order Out for delivery", Toast.LENGTH_SHORT)
                                     .show()
                             } else {
 
@@ -483,7 +541,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                                     val userData: MutableMap<String, Any?> = HashMap()
                                     userData["riderId"] = userModel?.connectWithRider
                                     FirebaseFirestore.getInstance()
-                                        .collection("ODER")
+                                        .collection("ORDER")
                                         .document(model[position].id)
                                         .update(userData)
                                         .addOnCompleteListener {
@@ -508,13 +566,13 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
             }
 
         } else if (model[position].delivery.equals("Delivered")) {
-            holder.deliveryBtn.text = "Oder Successfully Completed"
+            holder.deliveryBtn.text = "Order Successfully Completed"
             holder.canceledBtn.visibility = View.GONE
             holder.deliveryBtn.setOnClickListener {
-                Toast.makeText(context, "Oder already Delivered", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Order already Delivered", Toast.LENGTH_SHORT).show()
             }
         } else if (model[position].delivery.equals("Canceled")) {
-            holder.canceledBtn.text = "Oder Canceled"
+            holder.canceledBtn.text = "Order Canceled"
             holder.deliveryBtn.visibility = View.GONE
         }
 
@@ -535,7 +593,11 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         var qty_text: TextView = itemView.findViewById<TextView?>(R.id.qty_text)
         var qty_no: TextView = itemView.findViewById<TextView?>(R.id.qty_no)
         var yourPrice: TextView = itemView.findViewById<TextView?>(R.id.yourPrice)
+
         var userUid: TextView = itemView.findViewById<TextView?>(R.id.userUid)
+        var userName: TextView = itemView.findViewById<TextView?>(R.id.userName)
+        var deliveryPrice: TextView = itemView.findViewById<TextView?>(R.id.deliveryPrice)
+        var orderPayment: TextView = itemView.findViewById<TextView?>(R.id.orderPayment)
 
         var canceledBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.canceledBtn)
         var deliveryBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.deliveryBtn)
@@ -546,18 +608,67 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
         var riderImage: CircleImageView = itemView.findViewById<CircleImageView?>(R.id.riderImage)
 
     }
+
+    fun sendNotification(name: String?, message: String?, token: String?) {
+        val key =
+            "Key=AAAA1GKyPQY:APA91bHHqpGYjpQWwlHkB1SKY1HU_MbJHgll3RvthoX6C3CHDl3o86eb54u0ytDkvPtf4Zjr_acmVUKRVjtMwzND3bGg6XGQrzSxQFazinkADaAS4VJYFEOuIE0XtyhD0Cy02DjfPknL"
+        var headers = HashMap<String, String>()
+        headers["Content-Type"] = "application/json"
+        headers["Authorization"] = key
+
+        try {
+            val queue: RequestQueue = Volley.newRequestQueue(context)
+            val url = "https://fcm.googleapis.com/fcm/send"
+            val data = JSONObject()
+            data.put("title", name)
+            data.put("body", message)
+            val notificationData = JSONObject()
+            notificationData.put("notification", data)
+            notificationData.put("to", token)
+            val request: JsonObjectRequest =
+                object : JsonObjectRequest(url, notificationData,
+                    Response.Listener<JSONObject> {
+                        fun onResponse(response: JSONObject?) {}
+                    }, object : ErrorListener, Response.ErrorListener {
+                        override fun warning(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun error(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun fatalError(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onErrorResponse(error: VolleyError?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }) {
+                    // Override getHeaders() to set custom headers
+                    @Throws(AuthFailureError::class)
+                    override fun getHeaders(): Map<String, String> {
+                        return headers
+                    }
+                }
+            queue.add(request)
+        } catch (ex: java.lang.Exception) {
+        }
+    }
 }
 
 
 //            holder.deliveryBtn.setOnClickListener {
 //
 //                val builder = AlertDialog.Builder(context)
-//                builder.setTitle("Oder")
-//                builder.setMessage("Oder delivered ?")
+//                builder.setTitle("Order")
+//                builder.setMessage("Order delivered ?")
 //
 //                builder.setPositiveButton("Yes") { dialog, which ->
 //
-//                    //////Oder pending payment
+//                    //////Order pending payment
 //                    FirebaseFirestore.getInstance().collection("BRANCHES")
 //                        .document(model[position].storeId)
 //                        .get()
@@ -577,20 +688,20 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 //                                }
 //
 //                        })
-//                    //////Oder pending payment
+//                    //////Order pending payment
 //
 //                    val userData: MutableMap<String, Any?> =
 //                        HashMap()
 //                    userData["delivery"] = "Delivered"
 //                    userData["deliveredDate"] = System.currentTimeMillis().toString()
 //                    FirebaseFirestore.getInstance()
-//                        .collection("ODER")
+//                        .collection("ORDER")
 //                        .document(model[position].id)
 //                        .update(userData)
 //                        .addOnCompleteListener {
 //                            if (it.isSuccessful) {
 //                                notifyDataSetChanged()
-//                                Toast.makeText(context, "Oder Delivered", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, "Order Delivered", Toast.LENGTH_SHORT).show()
 //                            } else {
 //
 //                            }

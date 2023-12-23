@@ -16,6 +16,12 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.knockitbranchapp.Activity.DashboardActivity
 import com.example.knockitbranchapp.Model.BranchModel
@@ -28,8 +34,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import de.hdodenhof.circleimageview.CircleImageView
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
+import javax.xml.transform.ErrorListener
+import javax.xml.transform.TransformerException
 
 class RiderAdapter(var context: Context, var model: List<RiderModel>) :
     RecyclerView.Adapter<RiderAdapter.viewHolder>() {
@@ -79,6 +88,9 @@ class RiderAdapter(var context: Context, var model: List<RiderModel>) :
                         if (userModel?.connectWithRider.equals("")) {
                             riderConnectingDialog.show()
                             try {
+                                sendRiderNotification(userModel?.name.toString(), "Hii "+model[position].name.toString()+" Please Connect With "+userModel?.storeName.toString(),
+                                    model[position].token.toString()
+                                )
                                 val userData: MutableMap<String, Any?> = HashMap()
                                 userData["storeOwnerName"] = userModel?.name
                                 userData["storeOwnerProfile"] = userModel?.profile
@@ -151,5 +163,54 @@ class RiderAdapter(var context: Context, var model: List<RiderModel>) :
         var email: TextView = itemView.findViewById<TextView?>(R.id.riderEmail)
         var connectBtn: AppCompatButton = itemView.findViewById<AppCompatButton?>(R.id.connectRider)
 
+    }
+
+    fun sendRiderNotification(name: String?, message: String?, token: String?) {
+        val key =
+            "Key=AAAA1GKyPQY:APA91bHHqpGYjpQWwlHkB1SKY1HU_MbJHgll3RvthoX6C3CHDl3o86eb54u0ytDkvPtf4Zjr_acmVUKRVjtMwzND3bGg6XGQrzSxQFazinkADaAS4VJYFEOuIE0XtyhD0Cy02DjfPknL"
+        var headers = HashMap<String, String>()
+        headers["Content-Type"] = "application/json"
+        headers["Authorization"] = key
+
+        try {
+            val queue: RequestQueue = Volley.newRequestQueue(context)
+            val url = "https://fcm.googleapis.com/fcm/send"
+            val data = JSONObject()
+            data.put("title", name)
+            data.put("body", message)
+            val notificationData = JSONObject()
+            notificationData.put("notification", data)
+            notificationData.put("to", token)
+            val request: JsonObjectRequest =
+                object : JsonObjectRequest(url, notificationData,
+                    Response.Listener<JSONObject> {
+                        fun onResponse(response: JSONObject?) {}
+                    }, object : ErrorListener, Response.ErrorListener {
+                        override fun warning(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun error(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun fatalError(p0: TransformerException?) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onErrorResponse(error: VolleyError?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }){
+                    // Override getHeaders() to set custom headers
+                    @Throws(AuthFailureError::class)
+                    override fun getHeaders(): Map<String, String> {
+                        return headers
+                    }
+                }
+            queue.add(request)
+        } catch (ex: java.lang.Exception) {
+        }
     }
 }

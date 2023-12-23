@@ -37,7 +37,7 @@ class DeliveryActivity : AppCompatActivity() {
         binding.deliveryListRecyclerView.layoutManager = layoutManager
 
         deliveryListModel.add(DeliveryListModel("Pending"))
-        deliveryListModel.add(DeliveryListModel("Oder confirmed"))
+        deliveryListModel.add(DeliveryListModel("Order confirmed"))
         deliveryListModel.add(DeliveryListModel("Shipped"))
         deliveryListModel.add(DeliveryListModel("Out for delivery"))
         deliveryListModel.add(DeliveryListModel("Delivered"))

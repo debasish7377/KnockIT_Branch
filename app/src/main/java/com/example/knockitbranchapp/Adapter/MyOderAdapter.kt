@@ -324,7 +324,6 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
 
             /////Order Confirmed Notification
             holder.deliveryBtn.setOnClickListener {
-                MyServices.ringtone.stop()
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle("Order")
                 builder.setMessage("Are you sure to confirm this order ?")
@@ -545,6 +544,7 @@ class MyOderAdapter(var context: Context, var model: ArrayList<MyOderModel>) :
                                         .document(model[position].id)
                                         .update(userData)
                                         .addOnCompleteListener {
+
 
                                         }
 
